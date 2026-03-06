@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 export interface UserModelInterface extends Document {
   fullname: string;
   email: string;
-  password: string;
+  // password: string;
   role: "ADMIN" | "MANAGER" | "MEMBER";
   avatar?: string;
   isVerified: boolean;
@@ -30,11 +30,11 @@ const userSchema = new Schema<UserModelInterface>(
       maxlength: 100,
     },
 
-    password: {
-      type: String,
-      required: true,
-      minlength: 6,
-    },
+    // password: {
+    //   type: String,
+    //   required: true,
+    //   minlength: 6,
+    // },
 
     role: {
       type: String,
