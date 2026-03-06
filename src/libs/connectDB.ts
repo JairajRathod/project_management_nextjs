@@ -28,10 +28,13 @@ async function connectDB() {
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
-      dbName: "project_manager",
-      bufferCommands: false,
-    });
+    cached.promise = mongoose.connect(
+      process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/proman_the_manager",
+      {
+        dbName: "proman_the_manager",
+        bufferCommands: false,
+      },
+    );
   }
 
   cached.conn = await cached.promise;
