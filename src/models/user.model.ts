@@ -3,8 +3,10 @@ import mongoose, { Schema } from "mongoose";
 export interface UserModelInterface extends Document {
   fullname: string;
   email: string;
-  // password: string;
+  // password?: string;
   role: "ADMIN" | "MANAGER" | "MEMBER";
+  twoFactorEnabled: boolean;
+  twoFactorSecret?: string;
   avatar?: string;
   isVerified: boolean;
   isActive: boolean;
@@ -41,6 +43,10 @@ const userSchema = new Schema<UserModelInterface>(
       enum: ["ADMIN", "MANAGER", "MEMBER"],
       default: "MEMBER",
     },
+
+    twoFactorEnabled: { type: Boolean, default: false },
+
+    twoFactorSecret: { type: String },
 
     avatar: {
       type: String,
