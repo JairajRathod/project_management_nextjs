@@ -6,7 +6,7 @@ import mongoose, { Schema, Types } from "mongoose";
 
 export interface SprintModelInterface extends Document {
   name: string;
-  project: Types.ObjectId;
+  projectId: Types.ObjectId;
   startDate: Date;
   endDate: Date;
   status: "PLANNED" | "ACTIVE" | "COMPLETED";
@@ -23,7 +23,7 @@ const sprintSchema = new Schema<SprintModelInterface>(
       trim: true,
     },
 
-    project: {
+    projectId: {
       type: Schema.Types.ObjectId,
       ref: "Project",
       required: true,
