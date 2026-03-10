@@ -1,5 +1,6 @@
 import connectDB from "@/libs/connectDB";
 import { User } from "@/models/user.model";
+import { findUserByIdService } from "@/services/user.service";
 import ApiError from "@/utils/ApiError";
 import ApiResponse from "@/utils/ApiResponse";
 import { NextRequest } from "next/server";
@@ -17,15 +18,7 @@ export async function GET(
     const { id: userId } = await params;
 
     // finding the user
-    const isUserExist = await User.findById(userId);
-
-    // return error response if user not found
-    if (!isUserExist) {
-      return ApiError({
-        statusCode: 404,
-        message: "User not found",
-      });
-    }
+    const isUserExist = await findUserByIdService(userId);
 
     // return user details
     return ApiResponse({

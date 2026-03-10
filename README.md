@@ -45,3 +45,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 There will be 2 types of signup user can do
 1. Normal signup where user fill there info and verify themselves.
 2. Users created by the admin then use verify themselves.
+
+
+
+## Project
+

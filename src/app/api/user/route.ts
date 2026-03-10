@@ -1,5 +1,9 @@
 import connectDB from "@/libs/connectDB";
 import { User } from "@/models/user.model";
+import {
+  createUserService,
+  updateUserByEmailService,
+} from "@/services/user.service";
 import ApiError from "@/utils/ApiError";
 import ApiResponse from "@/utils/ApiResponse";
 import customError from "@/utils/customError";
@@ -26,19 +30,16 @@ export async function POST(req: NextRequest) {
     const isUserExist = await User.findOne({ email });
 
     if (isUserExist) {
-      const isUserUpdated = await User.findOneAndUpdate(
-        { email },
-        {
-          $set: { name, avatar: image },
-        },
-        {
-          runValidators: true,
-        },
-      );
+      const updatingDetails = {
+        email,
+        name,
+        avatar: image,
+      };
 
-      if (!isUserUpdated) {
-        throw new customError("Error during login", 400);
-      }
+      const isUserUpdated = await updateUserByEmailService(
+        email,
+        updatingDetails,
+      );
 
       return ApiResponse({
         statusCode: 200,
@@ -48,7 +49,7 @@ export async function POST(req: NextRequest) {
     }
 
     // creating the user in the database
-    const isUserCreated = await User.create({
+    const isUserCreated = await await createUserService({
       fullname: name,
       email: email,
       role: "MEMBER",
@@ -56,11 +57,6 @@ export async function POST(req: NextRequest) {
       isVerified: true,
       isActive: true,
     });
-
-    // throwing error if user not created
-    if (!isUserCreated) {
-      throw new customError("User not created", 400);
-    }
 
     // sending response if user created
     return ApiResponse({

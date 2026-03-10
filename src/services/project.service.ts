@@ -1,42 +1,63 @@
 import { Project } from "@/models/project.model";
-import customError from "@/utils/customError";
+import CustomError from "@/utils/customError";
 
-// find project and return details and if not found then throw error
-export async function findProjectService(projectId: string) {
-  try {
-    const isProjectExist = await Project.findById(projectId);
-
-    if (!isProjectExist) {
-      throw new customError("Project not found with provided id", 404);
-    }
-
-    return isProjectExist;
-  } catch (error) {
-    throw error;
-  }
+interface ProjectInput {
+  name?: string;
+  description?: string;
+  owner?: string;
+  members?: string[];
 }
 
-// delete project and return details and if not deleted then throw error
-export async function findAndDeleteProjectService(projectId: string) {
-  try {
-    // deleting project
-    const isProjectDeleted = await Project.findByIdAndDelete(projectId);
+// Create Project
+export async function createProjectService(projectDetails: ProjectInput) {
+  const project = await Project.create(projectDetails);
 
-    // if project not deleted then throw error
-    if (!isProjectDeleted) {
-      throw new customError("Error during removing project", 400);
-    }
-
-    return isProjectDeleted;
-  } catch (error) {
-    throw error;
+  if (!project) {
+    throw new CustomError("Project could not be created", 400);
   }
+
+  return project;
 }
 
-// update project and return result if not updated then throw error
-export async function findAndUpdateProjectService() {
-  try {
-  } catch (error) {
-    throw error;
+// Find Project By ID
+export async function findProjectByIdService(projectId: string) {
+  const project = await Project.findById(projectId).lean();
+
+  if (!project) {
+    throw new CustomError("Project not found with provided id", 404);
   }
+
+  return project;
+}
+
+// Delete Project
+export async function deleteProjectByIdService(projectId: string) {
+  const project = await Project.findByIdAndDelete(projectId);
+
+  if (!project) {
+    throw new CustomError("Project not found or already deleted", 404);
+  }
+
+  return project;
+}
+
+// Update Project
+export async function updateProjectByIdService(
+  projectId: string,
+  projectDetails: Partial<ProjectInput>,
+) {
+  const project = await Project.findByIdAndUpdate(
+    projectId,
+    { $set: projectDetails },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+
+  if (!project) {
+    throw new CustomError("Project not found or update failed", 404);
+  }
+
+  return project;
 }
