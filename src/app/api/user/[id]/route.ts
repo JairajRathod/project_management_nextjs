@@ -4,6 +4,7 @@ import ApiError from "@/utils/ApiError";
 import ApiResponse from "@/utils/ApiResponse";
 import { NextRequest } from "next/server";
 
+// get user details by id
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } },
@@ -42,6 +43,7 @@ export async function GET(
   }
 }
 
+// delete user by id
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } },
@@ -80,6 +82,7 @@ export async function DELETE(
   }
 }
 
+// update user by id
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } },

@@ -6,6 +6,7 @@ export interface ProjectModelInterface extends Document {
   description?: string;
   owner: Types.ObjectId;
   members: Types.ObjectId[];
+  organizationId?: Types.ObjectId;
   isArchived: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -24,7 +25,7 @@ const projectSchema = new Schema<ProjectModelInterface>(
       type: String,
       required: true,
       uppercase: true,
-      maxlength: 10, // Example: PROJ
+      maxlength: 10,
     },
 
     description: {
@@ -46,6 +47,11 @@ const projectSchema = new Schema<ProjectModelInterface>(
       },
     ],
 
+    organizationId: {
+      type: Schema.Types.ObjectId,
+      ref: "Organization",
+    },
+
     isArchived: {
       type: Boolean,
       default: false,
@@ -54,4 +60,6 @@ const projectSchema = new Schema<ProjectModelInterface>(
   { timestamps: true },
 );
 
-export const Project = mongoose.models.Project || mongoose.model<ProjectModelInterface>("Project", projectSchema);
+export const Project =
+  mongoose.models.Project ||
+  mongoose.model<ProjectModelInterface>("Project", projectSchema);

@@ -3,6 +3,7 @@ import { User } from "@/models/user.model";
 import ApiError from "@/utils/ApiError";
 import ApiResponse from "@/utils/ApiResponse";
 import customError from "@/utils/customError";
+import signupAndLoginValidator from "@/validators/auth.validator";
 import { NextRequest } from "next/server";
 
 // This is a post method which used to put data on database
@@ -11,10 +12,40 @@ export async function POST(req: NextRequest) {
     // connect the database
     await connectDB();
 
-    console.log(req);
+    const userDetails = await req.json();
+
+    const isUserDataValidated = signupAndLoginValidator.safeParse(userDetails);
+
+    if (!isUserDataValidated) {
+      throw new customError("User Data is not validated successfully", 400);
+    }
 
     // destructuring the required details
-    const { email, name, image } = await req.json();
+    const { email, name, image } = userDetails;
+
+    const isUserExist = await User.findOne({ email });
+
+    if (isUserExist) {
+      const isUserUpdated = await User.findOneAndUpdate(
+        { email },
+        {
+          $set: { name, avatar: image },
+        },
+        {
+          runValidators: true,
+        },
+      );
+
+      if (!isUserUpdated) {
+        throw new customError("Error during login", 400);
+      }
+
+      return ApiResponse({
+        statusCode: 200,
+        message: "User Login successfully",
+        data: isUserUpdated,
+      });
+    }
 
     // creating the user in the database
     const isUserCreated = await User.create({
