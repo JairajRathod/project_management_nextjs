@@ -1,9 +1,11 @@
+import { isItAdmin } from "@/libs/userRole";
 import ApiError from "@/utils/ApiError";
+import { NextRequest } from "next/server";
 
 // getting all projects details
 export async function GET() {
   try {
-    // checking wether user is admin or not
+    // checking wether user is admin or seller
     // if not admin then throw error
     // if admin then get all the project with the particular organization
     // if projects not fetched then throw error
@@ -19,4 +21,14 @@ export async function GET() {
 }
 
 //
-export async function POST() {}
+export async function POST(req: NextRequest) {
+  try {
+  } catch (error: unknown) {
+    const err = error as { statusCode?: number; message?: string };
+    return ApiError({
+      statusCode: err?.statusCode || 500,
+      error,
+      message: err?.message || "Something went wrong",
+    });
+  }
+}
