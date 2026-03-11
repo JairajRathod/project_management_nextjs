@@ -35,18 +35,27 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-
-
-
-
-
 ## Login Logic
 
 There will be 2 types of signup user can do
+
 1. Normal signup where user fill there info and verify themselves.
 2. Users created by the admin then use verify themselves.
 
+## Side_Navigation
 
+1. Admin: Dashboard, Projects, Admin, Projects with details
+2. Manager: Dashboard, Projects, Projects wih details
+3. Member: Dashboard, Projects, Projects wih details
 
-## Project
+## Member
 
+1. Profile access
+2. It's issues access
+
+## Manager
+
+1. Profile access : Member (Read, Update), Manager (Read, Update), Admin (Create, Read, Update, Delete)
+2. Project access : Manager (Read, Update), Admin (Create, Read, Update, Delete)
+3. Issue access : Member (Specific, Read, Update), Manager (CRUD), Admin (CRUD)
+4. Sprint Access : Manager (CRUD), Admin (CRUD)
