@@ -6,10 +6,8 @@ export interface ProjectModelInterface extends Document {
   description?: string;
   owner: Types.ObjectId;
   members: Types.ObjectId[];
-  organizationId?: Types.ObjectId;
+  access: string;
   isArchived: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 const projectSchema = new Schema<ProjectModelInterface>(
@@ -47,9 +45,10 @@ const projectSchema = new Schema<ProjectModelInterface>(
       },
     ],
 
-    organizationId: {
-      type: Schema.Types.ObjectId,
-      ref: "Organization",
+    access: {
+      type: String,
+      enum: ["PUBLIC", "PRIVATE"],
+      default: "PUBLIC",
     },
 
     isArchived: {
