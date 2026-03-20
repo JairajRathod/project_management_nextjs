@@ -1,9 +1,11 @@
 import connectDB from "@/libs/connectDB";
 import { User } from "@/models/user.model";
+import { findUserByIdService } from "@/services/user.service";
 import ApiError from "@/utils/ApiError";
 import ApiResponse from "@/utils/ApiResponse";
 import { NextRequest } from "next/server";
 
+// get user details by id
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } },
@@ -16,15 +18,7 @@ export async function GET(
     const { id: userId } = await params;
 
     // finding the user
-    const isUserExist = await User.findById(userId);
-
-    // return error response if user not found
-    if (!isUserExist) {
-      return ApiError({
-        statusCode: 404,
-        message: "User not found",
-      });
-    }
+    const isUserExist = await findUserByIdService(userId);
 
     // return user details
     return ApiResponse({
@@ -42,6 +36,7 @@ export async function GET(
   }
 }
 
+// delete user by id
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } },
@@ -80,6 +75,7 @@ export async function DELETE(
   }
 }
 
+// update user by id
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } },

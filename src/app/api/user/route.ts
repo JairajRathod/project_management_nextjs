@@ -1,8 +1,13 @@
 import connectDB from "@/libs/connectDB";
 import { User } from "@/models/user.model";
+import {
+  createUserService,
+  updateUserByEmailService,
+} from "@/services/user.service";
 import ApiError from "@/utils/ApiError";
 import ApiResponse from "@/utils/ApiResponse";
 import customError from "@/utils/customError";
+import signupAndLoginValidator from "@/validators/auth.validator";
 import { NextRequest } from "next/server";
 
 // This is a post method which used to put data on database
@@ -11,13 +16,40 @@ export async function POST(req: NextRequest) {
     // connect the database
     await connectDB();
 
-    console.log(req);
+    const userDetails = await req.json();
+
+    const isUserDataValidated = signupAndLoginValidator.safeParse(userDetails);
+
+    if (!isUserDataValidated) {
+      throw new customError("User Data is not validated successfully", 400);
+    }
 
     // destructuring the required details
-    const { email, name, image } = await req.json();
+    const { email, name, image } = userDetails;
+
+    const isUserExist = await User.findOne({ email });
+
+    if (isUserExist) {
+      const updatingDetails = {
+        email,
+        name,
+        avatar: image,
+      };
+
+      const isUserUpdated = await updateUserByEmailService(
+        email,
+        updatingDetails,
+      );
+
+      return ApiResponse({
+        statusCode: 200,
+        message: "User Login successfully",
+        data: isUserUpdated,
+      });
+    }
 
     // creating the user in the database
-    const isUserCreated = await User.create({
+    const isUserCreated = await await createUserService({
       fullname: name,
       email: email,
       role: "MEMBER",
@@ -25,11 +57,6 @@ export async function POST(req: NextRequest) {
       isVerified: true,
       isActive: true,
     });
-
-    // throwing error if user not created
-    if (!isUserCreated) {
-      throw new customError("User not created", 400);
-    }
 
     // sending response if user created
     return ApiResponse({

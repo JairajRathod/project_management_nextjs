@@ -3,10 +3,10 @@ import mongoose, { Schema, Types } from "mongoose";
 export interface IssueModelInterface {
   title: string;
   description: string;
-  project: Types.ObjectId;
-  sprint: Types.ObjectId;
-  reporter: Types.ObjectId;
-  assignee: Types.ObjectId;
+  projectId: Types.ObjectId;
+  sprintId: Types.ObjectId;
+  reporterId: Types.ObjectId;
+  assigneeId: Types.ObjectId;
   type: string;
   priority: string;
   status: string;
@@ -32,24 +32,24 @@ const issueSchema = new Schema(
       trim: true,
     },
 
-    project: {
+    projectId: {
       type: Schema.Types.ObjectId,
       ref: "Project",
       required: true,
     },
 
-    sprint: {
+    sprintId: {
       type: Schema.Types.ObjectId,
       ref: "Sprint",
     },
 
-    reporter: {
+    reporterId: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
 
-    assignee: {
+    assigneeId: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },

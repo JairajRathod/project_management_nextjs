@@ -6,9 +6,8 @@ export interface ProjectModelInterface extends Document {
   description?: string;
   owner: Types.ObjectId;
   members: Types.ObjectId[];
+  access: string;
   isArchived: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 const projectSchema = new Schema<ProjectModelInterface>(
@@ -24,7 +23,7 @@ const projectSchema = new Schema<ProjectModelInterface>(
       type: String,
       required: true,
       uppercase: true,
-      maxlength: 10, // Example: PROJ
+      maxlength: 10,
     },
 
     description: {
@@ -46,6 +45,12 @@ const projectSchema = new Schema<ProjectModelInterface>(
       },
     ],
 
+    access: {
+      type: String,
+      enum: ["PUBLIC", "PRIVATE"],
+      default: "PUBLIC",
+    },
+
     isArchived: {
       type: Boolean,
       default: false,
@@ -54,4 +59,6 @@ const projectSchema = new Schema<ProjectModelInterface>(
   { timestamps: true },
 );
 
-export const Project = mongoose.models.Project || mongoose.model<ProjectModelInterface>("Project", projectSchema);
+export const Project =
+  mongoose.models.Project ||
+  mongoose.model<ProjectModelInterface>("Project", projectSchema);

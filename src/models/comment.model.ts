@@ -1,8 +1,8 @@
 import mongoose, { Schema, Types } from "mongoose";
 
 export interface CommentModelInterface {
-  issue: Types.ObjectId;
-  author: Types.ObjectId;
+  issueId: Types.ObjectId;
+  authorId: Types.ObjectId;
   content: string;
   isEdited: boolean;
   createdAt: Date;
@@ -11,13 +11,13 @@ export interface CommentModelInterface {
 
 const commentSchema = new Schema<CommentModelInterface>(
   {
-    issue: {
+    issueId: {
       type: Schema.Types.ObjectId,
       ref: "Issue",
       required: true,
     },
 
-    author: {
+    authorId: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,

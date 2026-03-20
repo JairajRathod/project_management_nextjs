@@ -17,10 +17,7 @@ const handler = NextAuth({
       // connect database
       await connectDB();
 
-      // checking that user already exist or not
-      const existingUser = await User.findOne({ email: user?.email });
-
-      if (!existingUser || account?.provider === "google") {
+      if (account?.provider === "google") {
         // Send a POST request
         const response = await axios({
           method: "post",
@@ -32,10 +29,7 @@ const handler = NextAuth({
           },
         });
 
-        // if (!response?.success) {
-        //   console.log(response);
-        //   return false;
-        // }
+        console.log(response);
       }
 
       return true;
